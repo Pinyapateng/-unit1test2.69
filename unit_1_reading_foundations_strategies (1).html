@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 1: Reading Foundations & Strategies - ม.4</title>
+    <!-- โหลด Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- โหลด Font Sarabun และ Inter เพื่อความสวยงามและอ่านง่าย -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- โหลด Font Awesome สำหรับไอคอน -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Sarabun', 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #1e293b;
+        }
+        .en-text {
+            font-family: 'Inter', 'Sarabun', sans-serif;
+        }
+        /* สไตล์สำหรับการ์ดสรุปผลคะแนน */
+        .score-card-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        }
+        /* ซ่อน Scrollbar ของบางส่วนแต่ยังเลื่อนได้ */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* แอนิเมชันเมื่อเปลี่ยนแท็บ */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- ส่วนหัวของเว็บไซต์ (Header) -->
+    <header class="bg-indigo-900 text-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-3">
+                <div class="bg-amber-400 text-indigo-950 p-2.5 rounded-xl font-bold text-xl shadow-md">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-wide">การอ่านภาษาอังกฤษเชิงวิจารณ์ (ม.4)</h1>
+                    <p class="text-xs sm:text-sm text-indigo-200 en-text">Unit 1: Reading Foundations & Strategies</p>
+                    <p class="text-[11px] sm:text-xs text-amber-300 mt-0.5"><i class="fa-solid fa-chalkboard-user mr-1"></i>ครูผู้สอน: นางสาวภิญญาพัชญ์ คบด่านกลาง | โรงเรียนเตรียมอุดมศึกษาน้อมเกล้านครราชสีมา</p>
+                </div>
+            </div>
+            
+            <!-- ปุ่มสลับโหมด (อ่านสรุปเนื้อหา / ทำแบบทดสอบ) -->
+            <div class="flex bg-indigo-950/60 p-1 rounded-xl border border-indigo-700/50 w-full sm:w-auto">
+                <button id="tab-study" onclick="switchTab('study')" class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-amber-400 text-indigo-950 shadow">
+                    <i class="fa-solid fa-book mr-1.5"></i> สรุปเนื้อหา
+                </button>
+                <button id="tab-quiz" onclick="switchTab('quiz')" class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-semibold transition-all text-indigo-200 hover:text-white">
+                    <i class="fa-solid fa-pen-to-square mr-1.5"></i> แบบทดสอบ (20 ข้อ)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- กล่องแจ้งเตือนแบบกำหนดเอง (แทนการใช้ alert) -->
+    <div id="custom-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl transform transition-all scale-100">
+            <div class="flex items-center gap-3 text-amber-600 mb-3">
+                <i class="fa-solid fa-circle-exclamation text-3xl"></i>
+                <h3 class="text-xl font-bold text-slate-800" id="modal-title">แจ้งเตือน</h3>
+            </div>
+            <p class="text-slate-600 mb-6 leading-relaxed" id="modal-message">ข้อความแจ้งเตือน</p>
+            <div class="flex justify-end gap-3" id="modal-actions">
+                <button onclick="closeModal()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition shadow">
+                    ตกลง
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- พื้นที่เนื้อหาหลัก -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-6 sm:py-8">
+
+        <!-- ==========================================
+             ส่วนที่ 1: สรุปเนื้อหาบทเรียนอย่างละเอียด
+             ========================================== -->
+        <section id="section-study" class="fade-in space-y-6">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 pb-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <span class="inline-block px-3 py-1 bg-indigo-100 text-indigo-800 text-xs font-bold rounded-full mb-2">ทบทวนความรู้ก่อนสอบ</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 en-text">Unit 1: Reading Foundations & Strategies</h2>
+                        <p class="text-slate-500 text-sm mt-1">พื้นฐานและกลยุทธ์การอ่านภาษาอังกฤษอย่างมีประสิทธิภาพและเชิงวิจารณ์</p>
+                    </div>
+                    <button onclick="switchTab('quiz')" class="self-start sm:self-center bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-md transition flex items-center gap-2">
+                        <span>พร้อมแล้ว ไปทำข้อสอบ</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- เนื้อหาแบ่งเป็น 5 หัวข้อย่อยอย่างละเอียด -->
+                <div class="space-y-8">
+                    
+                    <!-- หัวข้อที่ 1 -->
+                    <div class="bg-slate-50 rounded-xl p-5 border-l-4 border-indigo-600">
+                        <h3 class="text-lg sm:text-xl font-bold text-indigo-900 mb-3 flex items-center gap-2">
+                            <span class="bg-indigo-600 text-white w-7 h-7 rounded-full inline-flex items-center justify-center text-sm">1</span>
+                            การอ่านเชิงรับ vs. การอ่านเชิงรุก (Passive vs. Active Reading)
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm sm:text-base">
+                            <div class="bg-white p-4 rounded-lg border border-slate-200">
+                                <h4 class="font-bold text-rose-600 mb-1"><i class="fa-solid fa-bed mr-1"></i> Passive Reading (การอ่านเชิงรับ)</h4>
+                                <p class="text-slate-600 leading-relaxed">คือการอ่านผ่านๆ อ่านตามตัวอักษรโดยไม่ตั้งคำถาม ไม่วิเคราะห์ หรือไม่เชื่อมโยงความรู้เดิม ทำให้จำเนื้อหาไม่ค่อยได้และไม่เข้าใจความหมายแฝง</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-slate-200">
+                                <h4 class="font-bold text-emerald-600 mb-1"><i class="fa-solid fa-brain mr-1"></i> Active & Critical Reading (การอ่านเชิงรุกและเชิงวิจารณ์)</h4>
+                                <p class="text-slate-600 leading-relaxed">คือการอ่านอย่างมีส่วนร่วม ผู้อ่านจะตั้งคำถาม (Questioning), คาดเดา (Predicting), จดบันทึก (Annotating), และประเมินความน่าเชื่อถือของข้อมูล (Evaluating) ไม่เชื่อทุกอย่างที่อ่านทันที</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- หัวข้อที่ 2 -->
+                    <div class="bg-slate-50 rounded-xl p-5 border-l-4 border-blue-500">
+                        <h3 class="text-lg sm:text-xl font-bold text-blue-900 mb-3 flex items-center gap-2">
+                            <span class="bg-blue-500 text-white w-7 h-7 rounded-full inline-flex items-center justify-center text-sm">2</span>
+                            กลยุทธ์การอ่านแบบรวดเร็ว (Skimming & Scanning)
+                        </h3>
+                        <ul class="space-y-3 text-slate-700 text-sm sm:text-base">
+                            <li class="bg-white p-4 rounded-lg border border-slate-200">
+                                <strong class="text-blue-700 en-text text-base">1. Skimming (การอ่านข้ามเพื่อจับใจความสำคัญ):</strong> 
+                                เป็นการกวาดสายตาอย่างรวดเร็วเพื่อหา <strong>Main Idea (ใจความสำคัญ)</strong> หรือภาพรวมของเรื่อง วิธีทำคือ อ่านชื่อเรื่อง (Title), ย่อหน้าแรก (Introduction), ประโยคแรกและประโยคสุดท้ายของแต่ละย่อหน้า (Topic & Concluding sentences) และย่อหน้าสรุป
+                            </li>
+                            <li class="bg-white p-4 rounded-lg border border-slate-200">
+                                <strong class="text-blue-700 en-text text-base">2. Scanning (การอ่านกวาดสายตาเพื่อหาข้อมูลเฉพาะ):</strong> 
+                                เป็นการมองหา <strong>Specific Information (ข้อมูลเจาะจง)</strong> โดยไม่อ่านทั้งเรื่อง เช่น การหาตัวเลข, วันที่, ปี ค.ศ., ชื่อคน, ชื่อสถานที่, หรือคำศัพท์เฉพาะ โดยใช้คำสำคัญ (Keywords) เป็นตัวนำสายตา
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- หัวข้อที่ 3 -->
+                    <div class="bg-slate-50 rounded-xl p-5 border-l-4 border-amber-500">
+                        <h3 class="text-lg sm:text-xl font-bold text-amber-900 mb-3 flex items-center gap-2">
+                            <span class="bg-amber-500 text-white w-7 h-7 rounded-full inline-flex items-center justify-center text-sm">3</span>
+                            การเดาความหมายคำศัพท์จากบริบท (Context Clues)
+                        </h3>
+                        <p class="text-slate-600 text-sm sm:text-base mb-3">เมื่อเจอคำศัพท์ที่ไม่รู้ความหมายในข้อสอบหรือบทความ เราสามารถใช้คำแวดล้อม (Context Clues) ช่วยเดาความหมายได้ 5 รูปแบบหลัก:</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                            <div class="bg-white p-3.5 rounded-lg border border-slate-200">
+                                <span class="font-bold text-amber-700 block mb-1">1. Definition / Restatement</span>
+                                <p class="text-slate-600 text-xs">บอกความหมายตรงๆ หรือกล่าวซ้ำ สังเกตคำว่า <em>is, means, refers to, or, that is, in other words</em> หรือเครื่องหมายคอมม่า (, ... ,)</p>
+                            </div>
+                            <div class="bg-white p-3.5 rounded-lg border border-slate-200">
+                                <span class="font-bold text-amber-700 block mb-1">2. Synonym (คำพ้องความหมาย)</span>
+                                <p class="text-slate-600 text-xs">ใช้คำที่มีความหมายเหมือนกันมาช่วยอธิบาย เช่น <em>similarly, likewise, also, just as</em></p>
+                            </div>
+                            <div class="bg-white p-3.5 rounded-lg border border-slate-200">
+                                <span class="font-bold text-amber-700 block mb-1">3. Antonym / Contrast (คำตรงข้าม)</span>
+                                <p class="text-slate-600 text-xs">บอกความหมายขัดแย้ง สังเกตคำว่า <em>but, however, although, whereas, unlike, on the other hand</em></p>
+                            </div>
+                            <div class="bg-white p-3.5 rounded-lg border border-slate-200">
+                                <span class="font-bold text-amber-700 block mb-1">4. Example (การยกตัวอย่าง)</span>
+                                <p class="text-slate-600 text-xs">ยกตัวอย่างประกอบคำศัพท์ สังเกตคำว่า <em>such as, for example (e.g.), for instance, including, like</em></p>
+                            </div>
+                            <div class="bg-white p-3.5 rounded-lg border border-slate-200">
+                                <span class="font-bold text-amber-700 block mb-1">5. Cause & Effect (เหตุและผล)</span>
+                                <p class="text-slate-600 text-xs">เดาจากความเป็นเหตุเป็นผล สังเกตคำว่า <em>because, since, so, therefore, consequently, as a result</em></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- หัวข้อที่ 4 -->
+                    <div class="bg-slate-50 rounded-xl p-5 border-l-4 border-emerald-600">
+                        <h3 class="text-lg sm:text-xl font-bold text-emerald-900 mb-3 flex items-center gap-2">
+                            <span class="bg-emerald-600 text-white w-7 h-7 rounded-full inline-flex items-center justify-center text-sm">4</span>
+                            โครงสร้างย่อหน้า: Topic, Main Idea และ Supporting Details
+                        </h3>
+                        <div class="space-y-3 text-sm sm:text-base text-slate-700">
+                            <div class="bg-white p-4 rounded-lg border border-slate-200">
+                                <p><strong class="text-emerald-700">• Topic (หัวเรื่อง):</strong> คำหรือกลุ่มคำสั้นๆ ที่บอกว่าเรื่องนี้เกี่ยวกับ "ใคร" หรือ "อะไร" (มักเป็นคำนาม ไม่ใช่ประโยคสมบูรณ์)</p>
+                                <p class="mt-2"><strong class="text-emerald-700">• Main Idea (ใจความสำคัญ):</strong> ประโยคที่บอกประเด็นสำคัญที่สุดของผู้เขียนเกี่ยวกับ Topic แบ่งเป็น 2 แบบคือ:</p>
+                                <ul class="list-disc list-inside ml-4 mt-1 text-slate-600 space-y-1">
+                                    <li><strong>Stated Main Idea:</strong> ใจความสำคัญที่ปรากฏชัดเจนในบทอ่าน (เรียกว่า <em>Topic Sentence</em> มักอยู่ต้นย่อหน้า หรือท้ายย่อหน้า)</li>
+                                    <li><strong>Implied Main Idea:</strong> ใจความสำคัญที่ไม่ได้เขียนบอกไว้ตรงๆ ผู้อ่านต้องสรุปความเอาเองจากรายละเอียดทั้งหมด</li>
+                                </ul>
+                                <p class="mt-2"><strong class="text-emerald-700">• Supporting Details (รายละเอียดสนับสนุน):</strong> ข้อมูล เหตุผล ตัวอย่าง สถิติ ที่ขยายความ Main Idea ให้ชัดเจนขึ้น (แบ่งเป็น Major และ Minor details)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- หัวข้อที่ 5 -->
+                    <div class="bg-slate-50 rounded-xl p-5 border-l-4 border-purple-600">
+                        <h3 class="text-lg sm:text-xl font-bold text-purple-900 mb-3 flex items-center gap-2">
+                            <span class="bg-purple-600 text-white w-7 h-7 rounded-full inline-flex items-center justify-center text-sm">5</span>
+                            พื้นฐานการอ่านเชิงวิจารณ์: Fact vs. Opinion และ Inference
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm sm:text-base">
+                            <div class="bg-white p-4 rounded-lg border border-slate-200">
+                                <h4 class="font-bold text-purple-700 mb-1">Fact (ข้อเท็จจริง) vs. Opinion (ความคิดเห็น)</h4>
+                                <p class="text-slate-600 text-sm leading-relaxed">
+                                    <strong>Fact:</strong> ข้อมูลที่พิสูจน์ได้ว่าจริงหรือเท็จ มีหลักฐาน สถิติ ตัวเลขรองรับ<br>
+                                    <strong>Opinion:</strong> ความรู้สึก ความเชื่อ การตัดสินคุณค่าของผู้เขียน มักมีคำแสดงความเห็น เช่น <em>should, must, believe, think, best, worst, beautiful</em>
+                                </p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-slate-200">
+                                <h4 class="font-bold text-purple-700 mb-1">Making Inferences (การอนุมาน/สรุปความนัย)</h4>
+                                <p class="text-slate-600 text-sm leading-relaxed">
+                                    คือการ "อ่านระหว่างบรรทัด" (Reading between the lines) โดยนำ <strong>เบาะแสจากบทอ่าน (Text Clues) + ความรู้พื้นฐานเดิม (Background Knowledge)</strong> มาสรุปสิ่งที่ผู้เขียนไม่ได้พูดออกมาตรงๆ อย่างมีเหตุผล
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ปุ่มด้านล่างของหน้าสรุปเนื้อหา -->
+                <div class="mt-8 pt-6 border-t border-slate-200 text-center">
+                    <p class="text-slate-600 mb-4 font-medium">ทบทวนเนื้อหาครบถ้วนแล้วใช่ไหม? มาทดสอบความเข้าใจกันเลย!</p>
+                    <button onclick="switchTab('quiz')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 rounded-xl font-bold text-base shadow-lg transition transform hover:-translate-y-0.5 inline-flex items-center gap-2">
+                        <i class="fa-solid fa-pen-clip"></i>
+                        <span>เข้าสู่แบบทดสอบหลังเรียน (20 ข้อ)</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             ส่วนที่ 2: แบบทดสอบหลังเรียน 20 ข้อ
+             ========================================== -->
+        <section id="section-quiz" class="hidden fade-in space-y-6">
+            
+            <!-- กล่องกรอกข้อมูลนักเรียน (บังคับกรอกก่อนส่ง) -->
+            <div id="student-info-card" class="bg-white rounded-2xl p-6 shadow-sm border-2 border-indigo-100">
+                <div class="flex items-center gap-2 text-indigo-800 font-bold text-lg mb-4">
+                    <i class="fa-solid fa-id-card text-indigo-600 text-xl"></i>
+                    <h3>ข้อมูลนักเรียน (กรุณากรอกให้ครบถ้วนเพื่อบันทึกผลคะแนน)</h3>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                    <div class="sm:col-span-6">
+                        <label for="student-name" class="block text-sm font-semibold text-slate-700 mb-1">ชื่อ - นามสกุล <span class="text-rose-500">*</span></label>
+                        <input type="text" id="student-name" placeholder="เช่น นายรักเรียน เพียรศึกษา" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label for="student-number" class="block text-sm font-semibold text-slate-700 mb-1">เลขที่ <span class="text-rose-500">*</span></label>
+                        <input type="number" id="student-number" min="1" max="60" placeholder="เช่น 15" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label for="student-class" class="block text-sm font-semibold text-slate-700 mb-1">ระดับชั้น <span class="text-rose-500">*</span></label>
+                        <select id="student-class" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white">
+                            <option value="">-- เลือกห้อง --</option>
+                            <option value="ม.4/1">ม.4/1</option>
+                            <option value="ม.4/2">ม.4/2</option>
+                            <option value="ม.4/3">ม.4/3</option>
+                            <option value="ม.4/4">ม.4/4</option>
+                            <option value="ม.4/5">ม.4/5</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 ส่วนแสดงผลคะแนน (ซ่อนไว้จนกว่าจะกดส่งข้อสอบ)
+                 ========================================== -->
+            <div id="result-summary-box" class="hidden space-y-6">
+                <!-- การ์ดสำหรับแคปหน้าจอส่งครู -->
+                <div id="capture-card" class="score-card-bg text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+                    <!-- ลวดลายตกแต่งพื้นหลัง -->
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-xl"></div>
+                    <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-amber-400/20 rounded-full blur-xl"></div>
+
+                    <div class="relative z-10">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-white/20 pb-4 mb-5 gap-2">
+                            <div>
+                                <span class="bg-amber-400 text-indigo-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Post-Test Result</span>
+                                <h2 class="text-xl sm:text-2xl font-bold mt-1.5">ผลการทดสอบหลังเรียน Unit 1</h2>
+                                <p class="text-indigo-200 text-xs sm:text-sm en-text">Reading Foundations & Strategies (การอ่านภาษาอังกฤษเชิงวิจารณ์)</p>
+                                <p class="text-amber-300 text-xs mt-1 font-medium">ครูผู้สอน: นางสาวภิญญาพัชญ์ คบด่านกลาง • โรงเรียนเตรียมอุดมศึกษาน้อมเกล้านครราชสีมา</p>
+                            </div>
+                            <div class="text-left sm:text-right bg-white/10 px-3.5 py-2 rounded-xl backdrop-blur-sm border border-white/10">
+                                <p class="text-xs text-indigo-200">วันที่และเวลาที่ส่ง</p>
+                                <p class="text-xs sm:text-sm font-semibold" id="res-timestamp">-</p>
+                            </div>
+                        </div>
+
+                        <!-- ข้อมูลนักเรียน & คะแนน -->
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                            <div class="md:col-span-7 space-y-2.5 bg-white/10 p-5 rounded-2xl border border-white/15">
+                                <div class="flex items-center gap-3">
+                                    <i class="fa-solid fa-user-graduate text-amber-300 text-lg w-6 text-center"></i>
+                                    <div>
+                                        <p class="text-xs text-indigo-200">ชื่อ - นามสกุล</p>
+                                        <p class="text-lg font-bold" id="res-name">-</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 pt-2 border-t border-white/10">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fa-solid fa-chalkboard-user text-amber-300 text-lg w-6 text-center"></i>
+                                        <div>
+                                            <p class="text-xs text-indigo-200">ระดับชั้น</p>
+                                            <p class="text-base font-bold" id="res-class">-</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <i class="fa-solid fa-hashtag text-amber-300 text-lg w-6 text-center"></i>
+                                        <div>
+                                            <p class="text-xs text-indigo-200">เลขที่</p>
+                                            <p class="text-base font-bold" id="res-number">-</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- วงกลมแสดงคะแนนรวม -->
+                            <div class="md:col-span-5 flex flex-col items-center justify-center bg-white text-slate-800 p-5 rounded-2xl shadow-lg">
+                                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">คะแนนรวมที่ได้</p>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-5xl font-extrabold text-indigo-700" id="res-score">0</span>
+                                    <span class="text-2xl font-bold text-slate-400">/ 20</span>
+                                </div>
+                                <div class="mt-2 px-3 py-1 rounded-full text-xs font-bold" id="res-badge">
+                                    -
+                                </div>
+                                <!-- สรุปคะแนนรายพาร์ท -->
+                                <div class="w-full grid grid-cols-3 gap-1 text-center text-[11px] text-slate-600 mt-3 pt-3 border-t border-slate-100">
+                                    <div>
+                                        <span class="block font-bold text-indigo-600" id="res-part1">0/10</span>
+                                        <span>ปรนัย</span>
+                                    </div>
+                                    <div class="border-x border-slate-200">
+                                        <span class="block font-bold text-indigo-600" id="res-part2">0/5</span>
+                                        <span>จับคู่</span>
+                                    </div>
+                                    <div>
+                                        <span class="block font-bold text-indigo-600" id="res-part3">0/5</span>
+                                        <span>เติมคำ</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- แถบแจ้งเตือนให้นักเรียนแคปหน้าจอ -->
+                        <div class="mt-5 bg-amber-400/20 border border-amber-300/40 rounded-xl p-3 flex items-center justify-center gap-2 text-amber-200 text-xs sm:text-sm font-medium text-center">
+                            <i class="fa-solid fa-camera text-base"></i>
+                            <span>ให้นักเรียนแคปภาพหน้าจอการ์ดสีน้ำเงินนี้ (Screenshot) เพื่อส่งครูผู้สอน</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ปุ่มทำข้อสอบใหม่ -->
+                <div class="flex justify-center gap-3">
+                    <button onclick="resetQuiz()" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold rounded-xl transition flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-rotate-right"></i> ทำแบบทดสอบใหม่อีกครั้ง
+                    </button>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 ฟอร์มข้อสอบทั้ง 3 ตอน (รวม 20 ข้อ)
+                 ========================================== -->
+            <form id="quiz-form" class="space-y-8">
+
+                <!-- ตอนที่ 1: แบบเลือกตอบ (Multiple Choice) ข้อ 1 - 10 -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                    <div class="border-b border-slate-100 pb-4 mb-6">
+                        <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">Part 1: Multiple Choice (10 Points)</span>
+                        <h3 class="text-xl font-bold text-slate-800 mt-2 en-text">Part 1: Multiple Choice (Items 1 - 10)</h3>
+                        <p class="text-sm text-slate-500 en-text">Directions: Choose the best answer for each question.</p>
+                    </div>
+                    <div id="part1-container" class="space-y-6">
+                        <!-- ข้อสอบตอนที่ 1 จะถูกสร้างด้วย JavaScript -->
+                    </div>
+                </div>
+
+                <!-- ตอนที่ 2: แบบจับคู่ (Matching) ข้อ 11 - 15 -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                    <div class="border-b border-slate-100 pb-4 mb-6">
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">Part 2: Matching (5 Points)</span>
+                        <h3 class="text-xl font-bold text-slate-800 mt-2 en-text">Part 2: Matching Reading Terms & Strategies (Items 11 - 15)</h3>
+                        <p class="text-sm text-slate-500 en-text">Directions: Match each reading term/strategy on the left with its correct definition (A - F) on the right.</p>
+                    </div>
+
+                    <!-- กล่องแสดงตัวเลือก A - F -->
+                    <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-4 mb-6 en-text">
+                        <h4 class="font-bold text-amber-900 text-sm mb-2.5"><i class="fa-solid fa-list-ul mr-1.5"></i>Definitions / Descriptions:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-sm text-slate-700">
+                            <div class="bg-white p-2.5 rounded-lg border border-amber-100"><strong>A.</strong> Moving your eyes quickly over a text to locate specific information such as dates, numbers, or names.</div>
+                            <div class="bg-white p-2.5 rounded-lg border border-amber-100"><strong>B.</strong> Using words with opposite meanings (e.g., <em>but, however</em>) to determine the meaning of an unfamiliar word.</div>
+                            <div class="bg-white p-2.5 rounded-lg border border-amber-100"><strong>C.</strong> The sentence that states the main idea of a paragraph, usually found at the beginning or end.</div>
+                            <div class="bg-white p-2.5 rounded-lg border border-amber-100"><strong>D.</strong> Reading actively by questioning, annotating, analyzing, and evaluating the credibility of information.</div>
+                            <div class="bg-white p-2.5 rounded-lg border border-amber-100"><strong>E.</strong> "Reading between the lines" by combining text clues with background knowledge to draw a logical conclusion.</div>
+                            <div class="bg-white p-2.5 rounded-lg border border-amber-100"><strong>F.</strong> Reading rapidly through a passage to get the general overview or main idea of the text.</div>
+                        </div>
+                    </div>
+
+                    <div id="part2-container" class="space-y-4">
+                        <!-- ข้อสอบตอนที่ 2 จะถูกสร้างด้วย JavaScript -->
+                    </div>
+                </div>
+
+                <!-- ตอนที่ 3: แบบเติมคำลงในช่องว่าง (Fill in the Blanks with Word Bank) ข้อ 16 - 20 -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                    <div class="border-b border-slate-100 pb-4 mb-6">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">Part 3: Fill in the Blanks (5 Points)</span>
+                        <h3 class="text-xl font-bold text-slate-800 mt-2 en-text">Part 3: Sentence Completion (Items 16 - 20)</h3>
+                        <p class="text-sm text-slate-500 en-text">Directions: Complete each sentence by selecting the most appropriate term from the Word Bank.</p>
+                    </div>
+
+                    <!-- คลังคำศัพท์ (Word Bank) -->
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
+                        <p class="text-xs font-bold text-emerald-800 uppercase tracking-wider mb-2 en-text"><i class="fa-solid fa-box-open mr-1"></i> Word Bank:</p>
+                        <div class="flex flex-wrap gap-2 en-text text-sm font-semibold">
+                            <span class="bg-white text-emerald-900 px-3 py-1.5 rounded-lg border border-emerald-200 shadow-xs">Fact</span>
+                            <span class="bg-white text-emerald-900 px-3 py-1.5 rounded-lg border border-emerald-200 shadow-xs">Opinion</span>
+                            <span class="bg-white text-emerald-900 px-3 py-1.5 rounded-lg border border-emerald-200 shadow-xs">Implied Main Idea</span>
+                            <span class="bg-white text-emerald-900 px-3 py-1.5 rounded-lg border border-emerald-200 shadow-xs">Context Clues</span>
+                            <span class="bg-white text-emerald-900 px-3 py-1.5 rounded-lg border border-emerald-200 shadow-xs">Supporting Details</span>
+                            <span class="bg-white text-emerald-900 px-3 py-1.5 rounded-lg border border-emerald-200 shadow-xs">Passive Reading</span>
+                        </div>
+                    </div>
+
+                    <div id="part3-container" class="space-y-4">
+                        <!-- ข้อสอบตอนที่ 3 จะถูกสร้างด้วย JavaScript -->
+                    </div>
+                </div>
+
+                <!-- ปุ่มส่งคำตอบ -->
+                <div id="submit-section" class="bg-white rounded-2xl p-6 shadow-md border border-slate-200 text-center">
+                    <p class="text-sm text-slate-600 mb-4">กรุณาตรวจสอบชื่อ-นามสกุล เลขที่ ห้องเรียน และคำตอบทั้ง 20 ข้อให้เรียบร้อยก่อนกดส่ง</p>
+                    <button type="button" onclick="submitQuiz()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-lg px-10 py-4 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2 mx-auto">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>ส่งคำตอบและตรวจคะแนน</span>
+                    </button>
+                </div>
+
+            </form>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-300 text-center py-5 text-xs mt-12 space-y-1">
+        <p class="font-semibold text-white">รายวิชาการอ่านภาษาอังกฤษเชิงวิจารณ์ ระดับชั้นมัธยมศึกษาปีที่ 4</p>
+        <p class="text-amber-300">จัดทำโดย: นางสาวภิญญาพัชญ์ คบด่านกลาง ครู โรงเรียนเตรียมอุดมศึกษาน้อมเกล้านครราชสีมา</p>
+    </footer>
+
+    <!-- ==========================================
+         ส่วนควบคุมการทำงานด้วย JavaScript
+         ========================================== -->
+    <script>
+        // ข้อมูลข้อสอบตอนที่ 1: ปรนัย 10 ข้อ (ภาษาอังกฤษทั้งหมด)
+        const part1Questions = [
+            {
+                id: 1,
+                question: "Which statement best describes the difference between 'Passive Reading' and 'Critical Reading'?",
+                options: [
+                    "Passive reading focuses on finding numbers, while critical reading focuses on reading aloud.",
+                    "Passive reading involves absorbing words without questioning, while critical reading involves analyzing and evaluating ideas.",
+                    "Passive reading is used only for newspapers, while critical reading is used only for fiction.",
+                    "Passive reading requires taking detailed notes, while critical reading requires skimming quickly."
+                ],
+                answer: 1,
+                explanation: "Passive Reading คือการอ่านเชิงรับโดยไม่ตั้งคำถาม ส่วน Critical Reading คือการอ่านอย่างวิเคราะห์และประเมินความน่าเชื่อถือของข้อมูล"
+            },
+            {
+                id: 2,
+                question: "If you want to find the exact year when the first smartphone was invented in a 5-page article, which reading strategy should you use?",
+                options: [
+                    "Skimming",
+                    "Scanning",
+                    "Making Inferences",
+                    "Summarizing"
+                ],
+                answer: 1,
+                explanation: "Scanning คือการกวาดสายตาอย่างรวดเร็วเพื่อหาข้อมูลเฉพาะเจาะจง เช่น ตัวเลข ปี ค.ศ. วันที่ หรือชื่อเฉพาะ"
+            },
+            {
+                id: 3,
+                question: "What is the main purpose of 'Skimming' a reading passage?",
+                options: [
+                    "To look up every unfamiliar vocabulary word in a dictionary",
+                    "To analyze the grammatical structure of every single sentence",
+                    "To quickly understand the general overview and main idea of the text",
+                    "To locate a specific phone number or email address on a webpage"
+                ],
+                answer: 2,
+                explanation: "Skimming คือการอ่านข้ามอย่างรวดเร็วเพื่อจับใจความสำคัญ (Main Idea) หรือดูภาพรวมของบทอ่าน"
+            },
+            {
+                id: 4,
+                question: "Read the sentence and determine the meaning of the underlined word:\n\"Unlike his <u class='font-bold'>gregarious</u> sister who loves going to parties and talking to everyone, Mark is very shy and prefers staying home alone.\"",
+                options: [
+                    "Shy and quiet",
+                    "Sociable and outgoing",
+                    "Lazy and careless",
+                    "Angry and impatient"
+                ],
+                answer: 1,
+                explanation: "ใช้ Antonym Context Clue จากคำว่า 'Unlike' (ไม่เหมือนกับ) ซึ่งเปรียบเทียบกับ Mark ที่ขี้อาย (shy) ดังนั้น gregarious จึงแปลว่า ชอบเข้าสังคม (Sociable and outgoing)"
+            },
+            {
+                id: 5,
+                question: "In question 4, which signal word helps the reader infer the meaning of 'gregarious'?",
+                options: [
+                    "Unlike",
+                    "and",
+                    "very",
+                    "alone"
+                ],
+                answer: 0,
+                explanation: "คำว่า 'Unlike' เป็นคำเชื่อมแสดงความขัดแย้ง (Contrast/Antonym Clue)"
+            },
+            {
+                id: 6,
+                question: "Read the sentence:\n\"Many <u class='font-bold'>nocturnal</u> animals, such as owls, bats, and raccoons, sleep during the day and hunt for food at night.\"\nWhat does the word 'nocturnal' mean?",
+                options: [
+                    "Eating only plants and leaves",
+                    "Living in oceans and rivers",
+                    "Active mainly during the night",
+                    "In danger of becoming extinct"
+                ],
+                answer: 2,
+                explanation: "ใช้ Example Clue (such as owls, bats...) ร่วมกับคำอธิบายท้ายประโยค (hunt for food at night) จึงแปลว่า สัตว์ที่ออกหากินในเวลากลางคืน"
+            },
+            {
+                id: 7,
+                question: "Which of the following is the best 'Topic' for a paragraph discussing the health benefits of drinking water, effects of dehydration, and tips to drink more water daily?",
+                options: [
+                    "You should drink eight glasses of water every day to stay healthy.",
+                    "The importance and habits of drinking water",
+                    "Dehydration often causes severe headaches and fatigue.",
+                    "How to buy an expensive stainless steel water bottle."
+                ],
+                answer: 1,
+                explanation: "Topic ต้องเป็นคำหรือกลุ่มคำสั้นๆ (Noun Phrase) ที่ครอบคลุมเนื้อหาทั้งหมด ไม่ใช่ประโยคสมบูรณ์ (ซึ่งจะเป็น Main Idea)"
+            },
+            {
+                id: 8,
+                question: "Which of the following statements is a 'Fact'?",
+                options: [
+                    "English is the most difficult language for high school students to master.",
+                    "Students should spend at least two hours reading books every night.",
+                    "Water boils at 100 degrees Celsius at standard atmospheric pressure.",
+                    "Reading e-books is much more enjoyable than reading printed books."
+                ],
+                answer: 2,
+                explanation: "น้ำเดือดที่อุณหภูมิ 100 องศาเซลเซียส เป็นข้อเท็จจริงทางวิทยาศาสตร์ที่พิสูจน์ได้ ส่วนข้ออื่นมีคำแสดงความคิดเห็น"
+            },
+            {
+                id: 9,
+                question: "Which of the following statements is an 'Opinion'?",
+                options: [
+                    "Bangkok is the capital city of Thailand.",
+                    "The Earth revolves around the Sun.",
+                    "Social media is the worst invention that destroys teenagers' concentration.",
+                    "There are twenty-four hours in a day."
+                ],
+                answer: 2,
+                explanation: "การใช้คำว่า 'the worst invention' เป็นการตัดสินคุณค่าและความรู้สึกส่วนตัวของผู้เขียน จึงเป็น Opinion"
+            },
+            {
+                id: 10,
+                question: "Read the situation:\n\"Sarah walked into the house dripping wet, shaking her umbrella, and complaining about the dark gray sky.\"\nWhat is the most logical inference you can make?",
+                options: [
+                    "Sarah just came back from swimming in an indoor pool.",
+                    "It was raining outside when Sarah walked home.",
+                    "Sarah forgot to bring her umbrella with her.",
+                    "Sarah loves walking outside in sunny weather."
+                ],
+                answer: 1,
+                explanation: "เบาะแสคือ ตัวเปียกโชก (dripping wet), สะบัดร่ม (shaking her umbrella) และบ่นเรื่องท้องฟ้าสีเทาเข้ม ทำให้สรุปได้ว่าข้างนอกฝนกำลังตก"
+            }
+        ];
+
+        // ข้อมูลข้อสอบตอนที่ 2: จับคู่ 5 ข้อ (ข้อ 11 - 15)
+        const part2Questions = [
+            { id: 11, term: "Skimming", answer: "F" },
+            { id: 12, term: "Scanning", answer: "A" },
+            { id: 13, term: "Topic Sentence", answer: "C" },
+            { id: 14, term: "Making Inferences", answer: "E" },
+            { id: 15, term: "Critical Reading", answer: "D" }
+        ];
+
+        // ข้อมูลข้อสอบตอนที่ 3: เติมคำ 5 ข้อ (ข้อ 16 - 20)
+        const part3Options = [
+            "Fact",
+            "Opinion",
+            "Implied Main Idea",
+            "Context Clues",
+            "Supporting Details",
+            "Passive Reading"
+        ];
+
+        const part3Questions = [
+            {
+                id: 16,
+                before: "When you encounter an unfamiliar word in a passage, you can use ",
+                after: " such as synonyms, antonyms, or examples to guess its meaning.",
+                answer: "Context Clues",
+                explanation: "Context Clues คือเบาะแสจากบริบทรอบข้างที่ใช้ช่วยเดาความหมายของคำศัพท์ที่ไม่คุ้นเคย"
+            },
+            {
+                id: 17,
+                before: "Examples, statistics, reasons, and explanations that help clarify and prove the main idea are called ",
+                after: ".",
+                answer: "Supporting Details",
+                explanation: "Supporting Details คือรายละเอียดสนับสนุนที่ช่วยขยายความและยืนยันใจความสำคัญ"
+            },
+            {
+                id: 18,
+                before: "If the author does not state the main idea directly in any sentence, the reader must figure out the ",
+                after: " by combining all the clues in the paragraph.",
+                answer: "Implied Main Idea",
+                explanation: "Implied Main Idea คือใจความสำคัญที่ไม่ได้ระบุไว้ตรงๆ ผู้อ่านต้องสรุปขึ้นเองจากรายละเอียดทั้งหมด"
+            },
+            {
+                id: 19,
+                before: "A statement that can be proven true or false through objective evidence, research, or measurement is a ",
+                after: ".",
+                answer: "Fact",
+                explanation: "Fact คือข้อเท็จจริงที่สามารถตรวจสอบและพิสูจน์ได้ด้วยหลักฐาน"
+            },
+            {
+                id: 20,
+                before: "Reading a text mechanically without questioning, analyzing, or connecting ideas is known as ",
+                after: ".",
+                answer: "Passive Reading",
+                explanation: "Passive Reading คือการอ่านแบบตั้งรับ อ่านผ่านๆ โดยไม่ได้คิดวิเคราะห์"
+            }
+        ];
+
+        // ฟังก์ชันสลับแท็บระหว่าง สรุปเนื้อหา และ แบบทดสอบ
+        function switchTab(tabName) {
+            const studySection = document.getElementById('section-study');
+            const quizSection = document.getElementById('section-quiz');
+            const tabStudyBtn = document.getElementById('tab-study');
+            const tabQuizBtn = document.getElementById('tab-quiz');
+
+            if (tabName === 'study') {
+                studySection.classList.remove('hidden');
+                quizSection.classList.add('hidden');
+                
+                tabStudyBtn.className = "flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-amber-400 text-indigo-950 shadow";
+                tabQuizBtn.className = "flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-semibold transition-all text-indigo-200 hover:text-white";
+            } else {
+                studySection.classList.add('hidden');
+                quizSection.classList.remove('hidden');
+
+                tabQuizBtn.className = "flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-amber-400 text-indigo-950 shadow";
+                tabStudyBtn.className = "flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-semibold transition-all text-indigo-200 hover:text-white";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ฟังก์ชันแสดง Modal แจ้งเตือน (แทน alert)
+        function showModal(title, message) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        // สร้างข้อสอบทั้งหมดลงในหน้าเว็บเมื่อโหลดเสร็จ
+        function renderQuiz() {
+            // 1. Render Part 1 (Multiple Choice)
+            const part1Container = document.getElementById('part1-container');
+            part1Container.innerHTML = part1Questions.map((q) => {
+                const formattedQuestion = q.question.replace(/\n/g, '<br>');
+                return `
+                    <div id="q-box-${q.id}" class="p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200 transition-all en-text">
+                        <p class="font-semibold text-slate-800 text-base mb-3 leading-relaxed">
+                            <span class="inline-block bg-indigo-600 text-white text-xs font-bold px-2.5 py-1 rounded-md mr-2">Item ${q.id}</span>
+                            ${formattedQuestion}
+                        </p>
+                        <div class="space-y-2.5 pl-1">
+                            ${q.options.map((opt, idx) => `
+                                <label class="flex items-start gap-3 p-3 rounded-xl bg-white border border-slate-200 hover:border-indigo-400 cursor-pointer transition select-none">
+                                    <input type="radio" name="q${q.id}" value="${idx}" class="mt-1 w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                                    <span class="text-sm sm:text-base text-slate-700 leading-snug">${opt}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                        <div id="feedback-${q.id}" class="hidden mt-3 p-3 rounded-lg text-sm font-sans"></div>
+                    </div>
+                `;
+            }).join('');
+
+            // 2. Render Part 2 (Matching)
+            const part2Container = document.getElementById('part2-container');
+            part2Container.innerHTML = part2Questions.map((q) => `
+                <div id="q-box-${q.id}" class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 en-text">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-md">Item ${q.id}</span>
+                        <span class="font-bold text-slate-800 text-base">${q.term}</span>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <select id="q${q.id}" class="w-full sm:w-72 px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-amber-500 outline-none">
+                            <option value="">-- Select Answer (A - F) --</option>
+                            <option value="A">A. Locate specific information</option>
+                            <option value="B">B. Opposite meaning context clues</option>
+                            <option value="C">C. Sentence stating main idea</option>
+                            <option value="D">D. Active & evaluative reading</option>
+                            <option value="E">E. Reading between the lines</option>
+                            <option value="F">F. Rapid reading for general overview</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="feedback-${q.id}" class="hidden -mt-2 mb-3 p-3 rounded-lg text-sm font-sans"></div>
+            `).join('');
+
+            // 3. Render Part 3 (Fill in the blanks)
+            const part3Container = document.getElementById('part3-container');
+            part3Container.innerHTML = part3Questions.map((q) => `
+                <div id="q-box-${q.id}" class="p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200">
+                    <div class="flex items-start gap-2.5 text-slate-800 text-sm sm:text-base leading-relaxed en-text">
+                        <span class="bg-emerald-600 text-white text-xs font-bold px-2.5 py-1 rounded-md shrink-0 mt-0.5">Item ${q.id}</span>
+                        <div>
+                            <span>${q.before}</span>
+                            <select id="q${q.id}" class="mx-1 my-1 px-3 py-1.5 rounded-lg border-2 border-emerald-400 bg-white font-bold text-emerald-900 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                                <option value="">-- Select Term --</option>
+                                ${part3Options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                            </select>
+                            <span>${q.after}</span>
+                        </div>
+                    </div>
+                    <div id="feedback-${q.id}" class="hidden mt-3 p-3 rounded-lg text-sm"></div>
+                </div>
+            `).join('');
+        }
+
+        // ฟังก์ชันตรวจคำตอบและคำนวณคะแนน
+        function submitQuiz() {
+            const name = document.getElementById('student-name').value.trim();
+            const number = document.getElementById('student-number').value.trim();
+            const studentClass = document.getElementById('student-class').value;
+
+            // ตรวจสอบการกรอกข้อมูลนักเรียน
+            if (!name || !number || !studentClass) {
+                showModal("ข้อมูลนักเรียนไม่ครบถ้วน", "กรุณากรอก ชื่อ-นามสกุล, เลขที่ และเลือกชั้นเรียน (ม.4/1 - ม.4/5) ให้ครบถ้วนก่อนส่งคำตอบครับ");
+                document.getElementById('student-info-card').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            // ตรวจสอบว่าทำครบทุกข้อหรือยัง
+            let unanswered = [];
+            for (let i = 1; i <= 10; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (!selected) unanswered.push(i);
+            }
+            for (let i = 11; i <= 20; i++) {
+                const val = document.getElementById(`q${i}`).value;
+                if (!val) unanswered.push(i);
+            }
+
+            if (unanswered.length > 0) {
+                showModal("ยังทำข้อสอบไม่ครบ", `นักเรียนยังไม่ได้ตอบคำถามข้อที่: ${unanswered.join(', ')}\nกรุณาทำให้ครบทั้ง 20 ข้อก่อนกดส่งนะครับ`);
+                const firstUnansweredEl = document.getElementById(`q-box-${unanswered[0]}`);
+                if (firstUnansweredEl) firstUnansweredEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            // เริ่มตรวจคะแนน
+            let part1Score = 0;
+            let part2Score = 0;
+            let part3Score = 0;
+
+            // ตรวจตอนที่ 1 (ข้อ 1 - 10)
+            part1Questions.forEach(q => {
+                const selected = parseInt(document.querySelector(`input[name="q${q.id}"]:checked`).value);
+                const box = document.getElementById(`q-box-${q.id}`);
+                const feedback = document.getElementById(`feedback-${q.id}`);
+                
+                // ล็อกตัวเลือกไม่ให้แก้หลังส่ง
+                document.querySelectorAll(`input[name="q${q.id}"]`).forEach(inp => inp.disabled = true);
+
+                feedback.classList.remove('hidden');
+                if (selected === q.answer) {
+                    part1Score++;
+                    box.classList.replace('border-slate-200', 'border-emerald-400');
+                    box.classList.replace('bg-slate-50', 'bg-emerald-50/40');
+                    feedback.className = "mt-3 p-3 rounded-lg text-sm bg-emerald-100 text-emerald-900 border border-emerald-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> <strong>ถูกต้อง!</strong> ${q.explanation}`;
+                } else {
+                    box.classList.replace('border-slate-200', 'border-rose-400');
+                    box.classList.replace('bg-slate-50', 'bg-rose-50/40');
+                    feedback.className = "mt-3 p-3 rounded-lg text-sm bg-rose-100 text-rose-900 border border-rose-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-1.5"></i> <strong>ไม่ถูกต้อง</strong> (คำตอบที่ถูกคือ: <u>${q.options[q.answer]}</u>)<br><span class="text-xs text-rose-800 mt-1 block">คำอธิบาย: ${q.explanation}</span>`;
+                }
+            });
+
+            // ตรวจตอนที่ 2 (ข้อ 11 - 15)
+            part2Questions.forEach(q => {
+                const selectEl = document.getElementById(`q${q.id}`);
+                const val = selectEl.value;
+                const box = document.getElementById(`q-box-${q.id}`);
+                const feedback = document.getElementById(`feedback-${q.id}`);
+                
+                selectEl.disabled = true;
+                feedback.classList.remove('hidden');
+
+                if (val === q.answer) {
+                    part2Score++;
+                    box.classList.replace('border-slate-200', 'border-emerald-400');
+                    box.classList.replace('bg-slate-50', 'bg-emerald-50/40');
+                    feedback.className = "-mt-2 mb-3 p-2.5 rounded-lg text-xs bg-emerald-100 text-emerald-900 border border-emerald-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> <strong>ถูกต้อง!</strong> ตอบข้อ ${q.answer}`;
+                } else {
+                    box.classList.replace('border-slate-200', 'border-rose-400');
+                    box.classList.replace('bg-slate-50', 'bg-rose-50/40');
+                    feedback.className = "-mt-2 mb-3 p-2.5 rounded-lg text-xs bg-rose-100 text-rose-900 border border-rose-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-1"></i> <strong>ไม่ถูกต้อง</strong> (คุณตอบ ${val} — คำตอบที่ถูกคือข้อ <strong>${q.answer}</strong>)`;
+                }
+            });
+
+            // ตรวจตอนที่ 3 (ข้อ 16 - 20)
+            part3Questions.forEach(q => {
+                const selectEl = document.getElementById(`q${q.id}`);
+                const val = selectEl.value;
+                const box = document.getElementById(`q-box-${q.id}`);
+                const feedback = document.getElementById(`feedback-${q.id}`);
+
+                selectEl.disabled = true;
+                feedback.classList.remove('hidden');
+
+                if (val === q.answer) {
+                    part3Score++;
+                    box.classList.replace('border-slate-200', 'border-emerald-400');
+                    box.classList.replace('bg-slate-50', 'bg-emerald-50/40');
+                    feedback.className = "mt-3 p-3 rounded-lg text-sm bg-emerald-100 text-emerald-900 border border-emerald-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> <strong>ถูกต้อง!</strong> ${q.explanation}`;
+                } else {
+                    box.classList.replace('border-slate-200', 'border-rose-400');
+                    box.classList.replace('bg-slate-50', 'bg-rose-50/40');
+                    feedback.className = "mt-3 p-3 rounded-lg text-sm bg-rose-100 text-rose-900 border border-rose-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-1.5"></i> <strong>ไม่ถูกต้อง</strong> (คำตอบที่ถูกคือ: <strong class="en-text">${q.answer}</strong>)<br><span class="text-xs text-rose-800 mt-1 block">คำอธิบาย: ${q.explanation}</span>`;
+                }
+            });
+
+            // คำนวณคะแนนรวม
+            const totalScore = part1Score + part2Score + part3Score;
+
+            // อัปเดตข้อมูลในการ์ดสรุปผลคะแนน
+            document.getElementById('res-name').innerText = name;
+            document.getElementById('res-class').innerText = studentClass;
+            document.getElementById('res-number').innerText = number;
+            document.getElementById('res-score').innerText = totalScore;
+            document.getElementById('res-part1').innerText = `${part1Score}/10`;
+            document.getElementById('res-part2').innerText = `${part2Score}/5`;
+            document.getElementById('res-part3').innerText = `${part3Score}/5`;
+
+            // ประเมินระดับผลการเรียน
+            const badgeEl = document.getElementById('res-badge');
+            if (totalScore >= 16) {
+                badgeEl.innerText = "ระดับดีเยี่ยม (Excellent)";
+                badgeEl.className = "mt-2 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800";
+            } else if (totalScore >= 12) {
+                badgeEl.innerText = "ระดับดี (Good)";
+                badgeEl.className = "mt-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800";
+            } else if (totalScore >= 10) {
+                badgeEl.innerText = "ผ่านเกณฑ์ (Pass)";
+                badgeEl.className = "mt-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800";
+            } else {
+                badgeEl.innerText = "ควรทบทวนเพิ่มเติม (Needs Review)";
+                badgeEl.className = "mt-2 px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800";
+            }
+
+            // บันทึกวันเวลาปัจจุบัน
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
+            const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('res-timestamp').innerText = `${dateStr} เวลา ${timeStr} น.`;
+
+            // แสดงกล่องผลคะแนน และซ่อนปุ่มส่งคำตอบ + กล่องกรอกชื่อ
+            document.getElementById('result-summary-box').classList.remove('hidden');
+            document.getElementById('submit-section').classList.add('hidden');
+            document.getElementById('student-info-card').classList.add('hidden');
+
+            // เลื่อนขึ้นไปด้านบนสุดเพื่อให้นักเรียนเห็นการ์ดคะแนนชัดเจนสำหรับแคปหน้าจอ
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ฟังก์ชันรีเซ็ตแบบทดสอบเพื่อทำใหม่
+        function resetQuiz() {
+            document.getElementById('result-summary-box').classList.add('hidden');
+            document.getElementById('submit-section').classList.remove('hidden');
+            document.getElementById('student-info-card').classList.remove('hidden');
+            renderQuiz();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // เริ่มสร้างข้อสอบเมื่อโหลดหน้าเว็บเสร็จสมบูรณ์
+        window.onload = function() {
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>
